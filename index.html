@@ -1026,11 +1026,11 @@ function renderXhsInspo() {
 
     <div class="inspo-grid">
       ${INSPIRATIONS.map((ins, i) => `
-        <div class="inspo-card" onclick="openLink('${ins.link}')">
+        <a class="inspo-card" href="${ins.link}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
           <div class="ic-emoji">${ins.emoji}</div>
           <div class="ic-title">${ins.title}</div>
           <div class="ic-source">${ins.source}</div>
-        </div>
+        </a>
       `).join('')}
     </div>
 
@@ -1060,14 +1060,14 @@ function renderXhsLearning() {
     <div class="motto">🐰 兔子姐姐，坚持14天，你会看到不一样的自己！</div>
 
     ${LEARNING_PATH.map(l => `
-      <div class="learn-card" onclick="openLink('${l.link}')">
+      <a class="learn-card" href="${l.link}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:flex;">
         <div class="lc-icon" style="background:${l.color};">${l.icon}</div>
         <div class="lc-info">
           <div class="lc-title">Day ${l.day} · ${l.title}</div>
           <div class="lc-desc">${l.desc}</div>
           <div class="lc-link">🔗 ${l.linkText}</div>
         </div>
-      </div>
+      </a>
     `).join('')}
 
     <div class="card" style="margin-top:16px;">
