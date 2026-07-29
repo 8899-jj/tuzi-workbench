@@ -605,29 +605,51 @@ textarea { resize: vertical; min-height: 70px; }
 const STORE_KEY = 'bunny_wb_mobile';
 
 function getDefaultData() {
+  const today = new Date();
+  const fmt = (d) => { const y = d.getFullYear(); const m = String(d.getMonth()+1).padStart(2,'0'); const day = String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; };
+  const t = fmt(today);
+  const t1 = fmt(new Date(today.getTime() + 86400000));
+  const t2 = fmt(new Date(today.getTime() + 2*86400000));
+  const t3 = fmt(new Date(today.getTime() + 3*86400000));
+  const t4 = fmt(new Date(today.getTime() + 4*86400000));
+
   return {
     orders: [
-      { id: 'TB2026072701', date: '2026-07-27', product: 'ins风陶瓷杯套装', source: '1688', cost: 18.5, price: 39.9, status: '已发货', profit: 21.4, note: '' },
-      { id: 'TB2026072601', date: '2026-07-26', product: '简约收纳盒大号', source: '1688', cost: 12, price: 29.9, status: '已签收', profit: 17.9, note: '' },
-      { id: 'TB2026072501', date: '2026-07-25', product: '可爱手机壳iPhone', source: '1688', cost: 5.8, price: 19.9, status: '已签收', profit: 14.1, note: '' },
+      { id: 'TB'+t.replace(/-/g,'')+'01', date: t, product: '法式复古珍珠耳钉', source: '1688', cost: 3.5, price: 19.9, status: '已发货', profit: 16.4, note: '' },
+      { id: 'TB'+t.replace(/-/g,'')+'02', date: t, product: '多巴胺串珠手链', source: '1688', cost: 2.8, price: 16.9, status: '待发货', profit: 14.1, note: '' },
+      { id: 'TB'+t1.replace(/-/g,'')+'01', date: t1, product: 'ins风陶瓷杯套装', source: '1688', cost: 18.5, price: 39.9, status: '已签收', profit: 21.4, note: '' },
+      { id: 'TB'+t2.replace(/-/g,'')+'01', date: t2, product: '极简几何金属耳环', source: '1688', cost: 4.2, price: 22.9, status: '已签收', profit: 18.7, note: '' },
     ],
     products: [
-      { id: 1, name: 'ins风陶瓷杯套装', source: '1688', sourcePrice: 18.5, targetPrice: 39.9, margin: '53.6%', status: '已上架', notes: '' },
-      { id: 2, name: '简约收纳盒大号', source: '1688', sourcePrice: 12, targetPrice: 29.9, margin: '59.9%', status: '已上架', notes: '' },
+      { id: 1, name: '法式复古珍珠耳钉', source: '1688', sourcePrice: 3.5, targetPrice: 19.9, margin: '82.4%', status: '已上架', notes: '🔥 搜索飙升，继续观察' },
+      { id: 2, name: '多巴胺串珠手链', source: '1688', sourcePrice: 2.8, targetPrice: 16.9, margin: '83.4%', status: '已上架', notes: '彩色款最受欢迎' },
+      { id: 3, name: 'ins风陶瓷杯套装', source: '1688', sourcePrice: 18.5, targetPrice: 39.9, margin: '53.6%', status: '已上架', notes: '' },
+      { id: 4, name: '极简几何金属耳环', source: '1688', sourcePrice: 4.2, targetPrice: 22.9, margin: '81.7%', status: '已上架', notes: '' },
     ],
-    xhsPosts: [],
-    licenses: [],
+    xhsPosts: [
+      { id: 1, date: t1, title: '多巴胺色系贴纸第一弹', type: '贴纸', status: '待发布', likes: 0 },
+      { id: 2, date: t3, title: '用iPad画Q版头像教程', type: '教程', status: '草稿', likes: 0 },
+      { id: 3, date: t4, title: '手绘头像定制开放接单', type: '接单', status: '计划中', likes: 0 },
+    ],
+    licenses: [
+      { id: 1, date: '2026-06-15', buyer: '贴纸店铺A', type: '贴纸授权', amount: 500, status: '已完成', note: '授权6款贴纸设计' },
+      { id: 2, date: '2026-05-20', buyer: '手帐博主B', type: '贴纸授权', amount: 350, status: '已完成', note: '授权4款手帐贴纸' },
+      { id: 3, date: '2026-04-08', buyer: '文创店C', type: '图案授权', amount: 200, status: '已完成', note: '授权2款图案' },
+    ],
     xhsData: { followers: 28, totalLikes: 342, totalPosts: 15, growth: '+3' },
-    reports: [],
+    reports: [
+      { id: 1, title: '关于社区便民服务工作的调研报告', date: t2, status: '撰写中', category: '调研报告', content: '' },
+      { id: 2, title: '基层治理经验交流发言稿', date: t4, status: '待开始', category: '发言稿', content: '' },
+    ],
     schedules: [
-      { id: 1, date: '2026-07-28', time: '09:00', title: '部门例会', type: '主业', done: false },
-      { id: 2, date: '2026-07-28', time: '20:00', title: '发布小红书新贴纸', type: '小红书', done: false },
-      { id: 3, date: '2026-07-29', time: '19:00', title: '1688选品调研', type: '淘宝', done: false },
-      { id: 4, date: '2026-07-31', time: '15:00', title: 'Orange家长会', type: '家庭', done: false },
+      { id: 1, date: t, time: '09:00', title: '部门例会', type: '主业', done: false },
+      { id: 2, date: t, time: '20:00', title: '发布小红书新贴纸', type: '小红书', done: false },
+      { id: 3, date: t1, time: '19:00', title: '1688选品调研', type: '淘宝', done: false },
+      { id: 4, date: t3, time: '15:00', title: 'Orange家长会', type: '家庭', done: false },
+      { id: 5, date: t, time: '12:30', title: '午休刷灵感图', type: '小红书', done: false },
     ],
     savings: { target: 2000000, current: 50000, monthly: 15000 },
-    // Track which hot products user has "copied"
-    copiedProducts: [],
+    copiedProducts: ['法式复古珍珠耳钉', '多巴胺串珠手链'],
   };
 }
 
@@ -1751,7 +1773,13 @@ function navigateTo(page) {
 }
 
 function openLink(url) {
-  window.open(url, '_blank');
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 function copyToClipboard(text) {
