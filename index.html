@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>兔子姐姐 · 工作台</title>
+
+<!-- PWA Meta -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="兔子工作台">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a0a2e">
+<meta name="description" content="兔子姐姐的多巴胺工作台 - 淘宝选品 · 插画灵感 · 兼职规划">
+
+<!-- Apple Touch Icon (generated via CSS fallback — real icon would be 180x180 PNG) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><rect width='180' height='180' rx='40' fill='%231a0a2e'/><text x='90' y='110' text-anchor='middle' font-size='100'>🐰</text></svg>">
+
+<!-- Web App Manifest -->
+<script>
+// Dynamic manifest injection
+const manifest = {
+  name: '兔子姐姐工作台',
+  short_name: '兔子工作台',
+  description: '淘宝选品 · 插画灵感 · 兼职规划',
+  start_url: location.href,
+  display: 'standalone',
+  orientation: 'portrait',
+  background_color: '#1a0a2e',
+  theme_color: '#1a0a2e',
+  icons: [{
+    src: "data:image/svg+xml," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192'><rect width='192' height='192' rx='42' fill='%231a0a2e'/><text x='96' y='118' text-anchor='middle' font-size='100'>🐰</text></svg>"),
+    sizes: '192x192',
+    type: 'image/svg+xml'
+  }]
+};
+const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+const manifestURL = URL.createObjectURL(blob);
+const link = document.createElement('link');
+link.rel = 'manifest';
+link.href = manifestURL;
+document.head.appendChild(link);
+</script>
+<style>
+/* ============================================================
+   MOBILE-FIRST DOPAMINE THEME
+   ============================================================ */
+:root {
+  --bg: #1a0a2e;
+  --bg-card: #2d1b4e;
+  --bg-card2: #352358;
+  --bg-input: #15082a;
+  --border: #4a3a6e;
+  --text: #f0e6ff;
+  --text-muted: #b8a9d4;
+
+  --pink: #ff6b9d;
+  --hotpink: #ff2d78;
+  --orange: #ff8c42;
+  --yellow: #ffd166;
+  --mint: #06d6a0;
+  --cyan: #4cc9f0;
+  --blue: #5b8def;
+  --purple: #c77dff;
+  --magenta: #f72585;
+
+  --gradient: linear-gradient(135deg, #ff6b9d, #c77dff, #4cc9f0);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 0% 0%, rgba(255,107,157,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(199,125,255,0.06) 0%, transparent 50%);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: calc(80px + var(--safe-bottom));
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== TOP BAR ========== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(26,10,46,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(74,58,110,0.4);
+}
+
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffb3c6, #ffd1dc);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 3px 12px rgba(255,107,157,0.35);
+  position: relative;
+  overflow: hidden;
+}
+.topbar-name { font-size: 0.9rem; font-weight: 800; }
+.topbar-role { font-size: 0.65rem; color: var(--text-muted); }
+.topbar-motto {
+  font-size: 0.68rem;
+  background: linear-gradient(135deg, rgba(255,209,102,0.2), rgba(255,107,157,0.2));
+  padding: 4px 12px;
+  border-radius: 20px;
+  color: var(--yellow);
+  font-weight: 600;
+}
+
+/* ========== BOTTOM NAV ========== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 50;
+  background: rgba(21,8,42,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  padding: 6px 4px calc(6px + var(--safe-bottom));
+  -webkit-overflow-scrolling: touch;
+}
+
+.bottom-nav::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+  flex: 0 0 auto;
+  min-width: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  border-radius: 10px;
+  position: relative;
+}
+
+.nav-btn .nb-icon { font-size: 1.4rem; transition: transform 0.2s; }
+.nav-btn.active { color: var(--pink); }
+.nav-btn.active .nb-icon { transform: scale(1.1); }
+.nav-btn:active { transform: scale(0.95); }
+
+.nav-btn.active::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  width: 24px; height: 3px;
+  background: var(--gradient);
+  border-radius: 0 0 3px 3px;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main { padding: 12px 14px; }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.25s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ========== SECTION TITLE ========== */
+.sec-title {
+  font-size: 1.15rem; font-weight: 800;
+  margin: 20px 0 12px;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== CARDS ========== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.card-title { font-size: 0.88rem; font-weight: 700; }
+
+/* ========== STAT ROW ========== */
+.stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+
+.stat-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: 3px 3px 0 0;
+}
+
+.stat-item.pink::after { background: linear-gradient(90deg, var(--pink), var(--hotpink)); }
+.stat-item.purple::after { background: linear-gradient(90deg, var(--purple), var(--blue)); }
+.stat-item.cyan::after { background: linear-gradient(90deg, var(--cyan), var(--mint)); }
+.stat-item.orange::after { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
+
+.stat-item .si-label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px; }
+.stat-item .si-value { font-size: 1.4rem; font-weight: 800; }
+.stat-item.pink .si-value { color: var(--pink); }
+.stat-item.purple .si-value { color: var(--purple); }
+.stat-item.cyan .si-value { color: var(--cyan); }
+.stat-item.orange .si-value { color: var(--orange); }
+.stat-item .si-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
+
+/* ========== BUTTONS ========== */
+.btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(255,107,157,0.3);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--purple);
+  border: 1.5px solid var(--purple);
+}
+.btn-sm { padding: 7px 14px; font-size: 0.75rem; border-radius: 10px; }
+.btn-block { width: 100%; justify-content: center; }
+
+/* ========== PRODUCT CARDS (mobile) ========== */
+.prod-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.prod-card .pc-top { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+
+.prod-card .pc-rank {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.8rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.prod-card .pc-rank.hot { background: linear-gradient(135deg, var(--magenta), var(--pink)); }
+.prod-card .pc-rank.warm { background: linear-gradient(135deg, var(--orange), var(--yellow)); }
+.prod-card .pc-rank.new { background: linear-gradient(135deg, var(--cyan), var(--mint)); }
+
+.prod-card .pc-info { flex: 1; }
+.prod-card .pc-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.prod-card .pc-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px; }
+.prod-card .pc-price-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; margin-top: 6px;
+}
+.prod-card .pc-cost { color: var(--text-muted); }
+.prod-card .pc-sell { color: var(--pink); font-weight: 700; font-size: 0.95rem; }
+.prod-card .pc-profit { color: var(--mint); font-weight: 700; font-size: 0.85rem; margin-left: auto; }
+
+/* ========== TAGS ========== */
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+.tag-pink { background: rgba(255,107,157,0.2); color: var(--pink); }
+.tag-purple { background: rgba(199,125,255,0.2); color: var(--purple); }
+.tag-cyan { background: rgba(76,201,240,0.2); color: var(--cyan); }
+.tag-mint { background: rgba(6,214,160,0.2); color: var(--mint); }
+.tag-yellow { background: rgba(255,209,102,0.2); color: var(--yellow); }
+.tag-orange { background: rgba(255,140,66,0.2); color: var(--orange); }
+
+/* ========== INSPO GRID ========== */
+.inspo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.inspo-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.inspo-card:active { transform: scale(0.97); border-color: var(--pink); }
+.inspo-card .ic-emoji { font-size: 2rem; margin-bottom: 4px; }
+.inspo-card .ic-title { font-size: 0.7rem; font-weight: 600; line-height: 1.3; }
+.inspo-card .ic-source { font-size: 0.6rem; color: var(--cyan); margin-top: 4px; word-break: break-all; }
+
+/* ========== VIRAL CARD ========== */
+.viral-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 10px;
+  border-left: 4px solid var(--hotpink);
+}
+
+.viral-card .vc-num {
+  font-size: 0.68rem; color: var(--hotpink); font-weight: 800; margin-bottom: 4px;
+}
+.viral-card .vc-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; }
+.viral-card .vc-formula {
+  background: var(--bg-input);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.73rem;
+  color: var(--yellow);
+  line-height: 1.6;
+}
+
+/* ========== LEARNING CARD ========== */
+.learn-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 10px;
+  display: flex; gap: 12px; align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.learn-card:active { transform: scale(0.98); border-color: var(--cyan); }
+
+.learn-card .lc-icon {
+  font-size: 1.8rem;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.learn-card .lc-info { flex: 1; }
+.learn-card .lc-title { font-weight: 700; font-size: 0.85rem; }
+.learn-card .lc-desc { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+.learn-card .lc-link { font-size: 0.65rem; color: var(--cyan); margin-top: 4px; word-break: break-all; }
+
+/* ========== DEBT CARD ========== */
+.goal-card {
+  background: linear-gradient(135deg, rgba(6,214,160,0.12), rgba(76,201,240,0.1));
+  border: 1px solid rgba(6,214,160,0.25);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.goal-card .gc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.goal-card .gc-label { font-size: 0.75rem; color: var(--text-muted); }
+.goal-card .gc-value { font-size: 1.5rem; font-weight: 800; color: var(--mint); }
+.goal-card .gc-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+
+.progress-bar {
+  height: 8px; background: var(--bg-input); border-radius: 4px; overflow: hidden; margin-top: 8px;
+}
+.progress-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--mint), var(--cyan));
+  transition: width 0.6s ease;
+}
+
+/* ========== SCHEDULE ITEM ========== */
+.sched-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(74,58,110,0.4);
+  font-size: 0.82rem;
+}
+.sched-item .si-time { font-size: 0.7rem; color: var(--text-muted); width: 38px; flex-shrink: 0; }
+
+/* ========== ORDER ITEM ========== */
+.order-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(74,58,110,0.4);
+  font-size: 0.82rem;
+}
+.order-item .oi-amount { font-weight: 700; color: var(--mint); margin-left: auto; font-size: 0.9rem; }
+
+/* ========== MODAL ========== */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(10,5,20,0.8);
+  backdrop-filter: blur(4px);
+  align-items: flex-end; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  padding: 24px 18px calc(24px + var(--safe-bottom));
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.modal-title {
+  font-size: 1.1rem; font-weight: 800; margin-bottom: 18px;
+  background: var(--gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== FORMS ========== */
+input, textarea, select {
+  width: 100%; padding: 12px 14px;
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text);
+  font-size: 0.85rem; font-family: inherit;
+  -webkit-appearance: none;
+}
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--purple); }
+textarea { resize: vertical; min-height: 70px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ========== TOAST ========== */
+.toast {
+  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+  background: var(--bg-card); border: 1px solid var(--purple);
+  padding: 12px 24px; border-radius: 12px;
+  font-size: 0.82rem; font-weight: 600; z-index: 200;
+  box-shadow: 0 8px 30px rgba(199,125,255,0.3);
+  animation: toastIn 0.3s ease;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+/* ========== HERO BANNER ========== */
+.hero {
+  background: var(--gradient);
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+  border-radius: var(--radius);
+  padding: 22px 18px;
+  margin-bottom: 16px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+@keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+.hero h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; }
+.hero p { font-size: 0.78rem; opacity: 0.9; }
+
+/* ========== EMPTY ========== */
+.empty {
+  text-align: center; padding: 30px 20px; color: var(--text-muted);
+}
+.empty .icon { font-size: 2.5rem; margin-bottom: 8px; opacity: 0.3; }
+.empty p { font-size: 0.8rem; }
+
+/* ========== QUICK ACTIONS ========== */
+.quick-actions {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  margin-bottom: 16px;
+}
+.qa-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  color: var(--text);
+}
+.qa-btn:active { transform: scale(0.96); border-color: var(--purple); }
+.qa-btn .qa-icon { font-size: 1.6rem; margin-bottom: 4px; }
+.qa-btn .qa-label { font-size: 0.72rem; font-weight: 700; }
+
+/* ========== DAILY MOTTO ========== */
+.motto {
+  text-align: center;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  background: linear-gradient(135deg, rgba(255,209,102,0.12), rgba(255,107,157,0.12));
+  border-radius: 20px;
+  color: var(--yellow);
+  border: 1px solid rgba(255,209,102,0.2);
+}
+
+/* ========== TABLE (mobile simplified) ========== */
+.mobile-table { font-size: 0.8rem; }
+.mobile-table .mt-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 0; border-bottom: 1px solid rgba(74,58,110,0.4);
+}
+.mobile-table .mt-row:last-child { border-bottom: none; }
+
+/* ========== COPY BTN ========== */
+.copy-btn {
+  background: rgba(199,125,255,0.15);
+  border: 1px solid rgba(199,125,255,0.3);
+  color: var(--purple);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.copy-btn:active { background: rgba(199,125,255,0.3); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar" id="topbar">
+  <div class="topbar-left">
+    <div class="topbar-avatar">👧🏻</div>
+    <div>
+      <div class="topbar-name">兔子姐姐</div>
+      <div class="topbar-role">搞钱进度中...</div>
+    </div>
+  </div>
+  <div class="topbar-motto" id="topbarMotto">💪 今天也要加油</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main" id="mainContent"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-btn active" data-page="dashboard">
+    <span class="nb-icon">🏠</span>看板
+  </button>
+  <button class="nav-btn" data-page="taobao-hot">
+    <span class="nb-icon">💎</span>选品
+  </button>
+  <button class="nav-btn" data-page="xhs-inspo">
+    <span class="nb-icon">🎨</span>插画
+  </button>
+  <button class="nav-btn" data-page="xhs-viral">
+    <span class="nb-icon">🚀</span>爆款
+  </button>
+  <button class="nav-btn" data-page="side-hustle">
+    <span class="nb-icon">📊</span>规划
+  </button>
+  <button class="nav-btn" data-page="work-schedule">
+    <span class="nb-icon">📋</span>日程
+  </button>
+</nav>
+
+<div id="toastContainer"></div>
+
+<script>
+// ============================================================
+// DATA STORE
+// ============================================================
+const STORE_KEY = 'bunny_wb_mobile';
+
+function getDefaultData() {
+  return {
+    orders: [
+      { id: 'TB2026072701', date: '2026-07-27', product: 'ins风陶瓷杯套装', source: '1688', cost: 18.5, price: 39.9, status: '已发货', profit: 21.4, note: '' },
+      { id: 'TB2026072601', date: '2026-07-26', product: '简约收纳盒大号', source: '1688', cost: 12, price: 29.9, status: '已签收', profit: 17.9, note: '' },
+      { id: 'TB2026072501', date: '2026-07-25', product: '可爱手机壳iPhone', source: '1688', cost: 5.8, price: 19.9, status: '已签收', profit: 14.1, note: '' },
+    ],
+    products: [
+      { id: 1, name: 'ins风陶瓷杯套装', source: '1688', sourcePrice: 18.5, targetPrice: 39.9, margin: '53.6%', status: '已上架', notes: '' },
+      { id: 2, name: '简约收纳盒大号', source: '1688', sourcePrice: 12, targetPrice: 29.9, margin: '59.9%', status: '已上架', notes: '' },
+    ],
+    xhsPosts: [],
+    licenses: [],
+    xhsData: { followers: 28, totalLikes: 342, totalPosts: 15, growth: '+3' },
+    reports: [],
+    schedules: [
+      { id: 1, date: '2026-07-28', time: '09:00', title: '部门例会', type: '主业', done: false },
+      { id: 2, date: '2026-07-28', time: '20:00', title: '发布小红书新贴纸', type: '小红书', done: false },
+      { id: 3, date: '2026-07-29', time: '19:00', title: '1688选品调研', type: '淘宝', done: false },
+      { id: 4, date: '2026-07-31', time: '15:00', title: 'Orange家长会', type: '家庭', done: false },
+    ],
+    savings: { target: 2000000, current: 50000, monthly: 15000 },
+    // Track which hot products user has "copied"
+    copiedProducts: [],
+  };
+}
+
+let data = loadData();
+
+function loadData() {
+  try { const raw = localStorage.getItem(STORE_KEY); return raw ? JSON.parse(raw) : getDefaultData(); }
+  catch { return getDefaultData(); }
+}
+function saveData() { localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
+
+// ============================================================
+// 1688 HOT PRODUCTS DATA (curated for accessories/jewelry)
+// ============================================================
+const HOT_PRODUCTS = [
+  { rank: 1, heat: 'hot', name: '法式复古珍珠耳钉', cat: '耳饰', cost: 3.5, sell: 19.9, profit: 16.4, margin: '82%', source: '1688饰品源头工厂', keyword: '珍珠耳钉 复古 法式', trend: '🔥 搜索飙升' },
+  { rank: 2, heat: 'hot', name: 'Y2K千禧风蝴蝶项链', cat: '项链', cost: 5.8, sell: 29.9, profit: 24.1, margin: '81%', source: '义乌饰品批发', keyword: 'Y2K 蝴蝶项链 千禧风', trend: '🔥 搜索飙升' },
+  { rank: 3, heat: 'hot', name: '多巴胺彩色串珠手链', cat: '手链', cost: 2.8, sell: 16.9, profit: 14.1, margin: '83%', source: '广州饰品产业带', keyword: '多巴胺 串珠手链 彩色', trend: '📈 持续上升' },
+  { rank: 4, heat: 'hot', name: '极简几何金属耳环', cat: '耳饰', cost: 4.2, sell: 22.9, profit: 18.7, margin: '82%', source: '青岛饰品工厂', keyword: '几何耳环 极简 金属', trend: '📈 持续上升' },
+  { rank: 5, heat: 'hot', name: '碎银几两锁骨链', cat: '项链', cost: 6.5, sell: 35.9, profit: 29.4, margin: '82%', source: '深圳水贝银饰', keyword: '锁骨链 碎银 小众设计', trend: '🔥 搜索飙升' },
+  { rank: 6, heat: 'hot', name: '不对称设计流苏耳线', cat: '耳饰', cost: 3.8, sell: 25.9, profit: 22.1, margin: '85%', source: '义乌耳饰工厂', keyword: '耳线 不对称 流苏', trend: '📈 持续上升' },
+  { rank: 7, heat: 'warm', name: '甜美蝴蝶结发夹套装', cat: '发饰', cost: 1.5, sell: 12.9, profit: 11.4, margin: '88%', source: '义乌发饰批发', keyword: '蝴蝶结 发夹 套装 甜美', trend: '📈 稳步增长' },
+  { rank: 8, heat: 'warm', name: 'ins风莫兰迪色发圈', cat: '发饰', cost: 1.2, sell: 9.9, profit: 8.7, margin: '88%', source: '义乌小商品', keyword: '莫兰迪 发圈 ins风', trend: '📈 稳步增长' },
+  { rank: 9, heat: 'warm', name: '天然淡水珍珠手链', cat: '手链', cost: 8.5, sell: 39.9, profit: 31.4, margin: '79%', source: '诸暨珍珠产业带', keyword: '淡水珍珠 手链 天然', trend: '🔥 搜索飙升' },
+  { rank: 10, heat: 'warm', name: '复古巴洛克风格戒指', cat: '戒指', cost: 4.5, sell: 24.9, profit: 20.4, margin: '82%', source: '广州首饰工厂', keyword: '巴洛克 戒指 复古 开口', trend: '📈 持续上升' },
+  { rank: 11, heat: 'warm', name: '国风新中式玉石耳钉', cat: '耳饰', cost: 6.8, sell: 32.9, profit: 26.1, margin: '79%', source: '苏州玉石加工', keyword: '新中式 玉石耳钉 国风', trend: '🔥 搜索飙升' },
+  { rank: 12, heat: 'warm', name: '极细蛇骨链锁骨链', cat: '项链', cost: 3.2, sell: 19.9, profit: 16.7, margin: '84%', source: '义乌项链工厂', keyword: '蛇骨链 锁骨链 极细', trend: '📈 持续上升' },
+  { rank: 13, heat: 'warm', name: '大牌平替金属发箍', cat: '发饰', cost: 2.5, sell: 15.9, profit: 13.4, margin: '84%', source: '义乌发饰产业带', keyword: '发箍 金属 平替 大牌', trend: '📈 稳步增长' },
+  { rank: 14, heat: 'warm', name: '可调节开口素圈戒指', cat: '戒指', cost: 2.2, sell: 15.9, profit: 13.7, margin: '86%', source: '义乌戒指工厂', keyword: '素圈戒指 开口 可调节', trend: '📈 稳步增长' },
+  { rank: 15, heat: 'new', name: '多巴胺彩色亚克力耳环', cat: '耳饰', cost: 2.8, sell: 18.9, profit: 16.1, margin: '85%', source: '广州亚克力工厂', keyword: '亚克力耳环 多巴胺 彩色', trend: '🆕 新兴爆款' },
+  { rank: 16, heat: 'new', name: '复古钱币吊坠项链', cat: '项链', cost: 5.2, sell: 28.9, profit: 23.7, margin: '82%', source: '义乌复古饰品', keyword: '钱币吊坠 复古 项链', trend: '🆕 新兴爆款' },
+  { rank: 17, heat: 'new', name: '手工编织蜡线手绳', cat: '手链', cost: 1.8, sell: 12.9, profit: 11.1, margin: '86%', source: '手工编织作坊', keyword: '蜡线手绳 手工 编织', trend: '🆕 新兴爆款' },
+  { rank: 18, heat: 'new', name: '透明树脂花朵耳钉', cat: '耳饰', cost: 3.5, sell: 19.9, profit: 16.4, margin: '82%', source: '广州树脂工厂', keyword: '树脂耳钉 花朵 透明', trend: '🆕 新兴爆款' },
+  { rank: 19, heat: 'new', name: '古巴链男士简约项链', cat: '项链', cost: 7.5, sell: 35.9, profit: 28.4, margin: '79%', source: '义乌男饰批发', keyword: '古巴链 男士项链 简约', trend: '📈 稳步增长' },
+  { rank: 20, heat: 'new', name: '迷你字母吊坠组合链', cat: '项链', cost: 4.8, sell: 26.9, profit: 22.1, margin: '82%', source: '广州字母饰品', keyword: '字母吊坠 定制 组合链', trend: '🆕 新兴爆款' },
+];
+
+// ============================================================
+// INSPIRATION DATA (50 curated illustration inspirations)
+// ============================================================
+const INSPIRATIONS = [
+  { emoji: '🌸', title: '扁平风植物系列', source: 'Pinterest 热门插画板', link: 'https://www.pinterest.com/search/?q=flat+illustration+plants+commercial' },
+  { emoji: '🐱', title: '萌宠日常小漫画', source: '小红书 #治愈系插画', link: 'https://www.xiaohongshu.com/search_result?keyword=治愈系插画萌宠' },
+  { emoji: '🍰', title: '甜品美食手绘', source: 'Behance Food Illustration', link: 'https://www.behance.net/search/projects/food+illustration+commercial' },
+  { emoji: '👗', title: '时尚穿搭插画', source: 'Pinterest Fashion Sketch', link: 'https://www.pinterest.com/search/?q=fashion+illustration+sketch+procreate' },
+  { emoji: '🏠', title: '温馨小屋场景', source: 'Dribbble Isometric Room', link: 'https://dribbble.com/search/isometric-room-illustration' },
+  { emoji: '📱', title: 'APP启动页插画', source: 'Behance Splash Screen', link: 'https://www.behance.net/search/projects/splash+screen+illustration' },
+  { emoji: '🎀', title: '少女心贴纸设计', source: '小红书 #手帐贴纸', link: 'https://www.xiaohongshu.com/search_result?keyword=手帐贴纸设计插画' },
+  { emoji: '☕', title: '咖啡店氛围插画', source: 'Pinterest Cafe Art', link: 'https://www.pinterest.com/search/?q=cafe+illustration+cozy+procreate' },
+  { emoji: '🌟', title: '星空梦幻系列', source: 'Dribbble Galaxy Art', link: 'https://dribbble.com/search/galaxy-illustration' },
+  { emoji: '📖', title: '书籍封面设计', source: 'Behance Book Cover', link: 'https://www.behance.net/search/projects/book+cover+illustration+commercial' },
+  { emoji: '🎵', title: '音乐节海报风', source: 'Pinterest Music Poster', link: 'https://www.pinterest.com/search/?q=music+festival+poster+illustration' },
+  { emoji: '👶', title: '儿童绘本风格', source: 'Behance Children Book', link: 'https://www.behance.net/search/projects/children+book+illustration' },
+  { emoji: '💄', title: '美妆产品插画', source: 'Pinterest Cosmetic Art', link: 'https://www.pinterest.com/search/?q=cosmetic+illustration+product+commercial' },
+  { emoji: '🌿', title: '森系自然元素', source: 'Dribbble Nature Flat', link: 'https://dribbble.com/search/nature-flat-illustration' },
+  { emoji: '🎄', title: '节日贺卡插画', source: 'Pinterest Holiday Card', link: 'https://www.pinterest.com/search/?q=holiday+card+illustration+commercial' },
+  { emoji: '🧸', title: '玩具包装插画', source: 'Behance Toy Package', link: 'https://www.behance.net/search/projects/toy+packaging+illustration' },
+  { emoji: '🍵', title: '国风茶饮插画', source: '小红书 #国风插画', link: 'https://www.xiaohongshu.com/search_result?keyword=国风插画茶饮' },
+  { emoji: '✈️', title: '旅行手帐风格', source: 'Pinterest Travel Journal', link: 'https://www.pinterest.com/search/?q=travel+journal+illustration+procreate' },
+  { emoji: '🎂', title: '生日派对插画', source: 'Dribbble Birthday Card', link: 'https://dribbble.com/search/birthday-illustration-card' },
+  { emoji: '🐰', title: '兔子角色设计', source: 'Pinterest Bunny Character', link: 'https://www.pinterest.com/search/?q=bunny+character+design+illustration' },
+  { emoji: '🌻', title: '向日葵田园风', source: 'Behance Botanical Art', link: 'https://www.behance.net/search/projects/botanical+illustration+commercial' },
+  { emoji: '🎪', title: '马戏团复古风', source: 'Pinterest Circus Vintage', link: 'https://www.pinterest.com/search/?q=circus+vintage+illustration+poster' },
+  { emoji: '🦋', title: '蝴蝶元素图案', source: 'Dribbble Butterfly Pattern', link: 'https://dribbble.com/search/butterfly-pattern-illustration' },
+  { emoji: '🍕', title: '美食菜单插画', source: 'Behance Menu Design', link: 'https://www.behance.net/search/projects/menu+illustration+food' },
+  { emoji: '🎨', title: '渐变抽象艺术', source: 'Pinterest Abstract Gradient', link: 'https://www.pinterest.com/search/?q=abstract+gradient+illustration+procreate' },
+  { emoji: '👩‍🎨', title: '女性力量主题', source: 'Behance Women Power', link: 'https://www.behance.net/search/projects/women+empowerment+illustration' },
+  { emoji: '🌊', title: '海洋世界插画', source: 'Pinterest Ocean Art', link: 'https://www.pinterest.com/search/?q=ocean+illustration+procreate+commercial' },
+  { emoji: '🎁', title: '礼物包装设计', source: 'Dribbble Gift Wrap', link: 'https://dribbble.com/search/gift-packaging-illustration' },
+  { emoji: '🏮', title: '中国风节气插画', source: '小红书 #节气插画', link: 'https://www.xiaohongshu.com/search_result?keyword=二十四节气插画' },
+  { emoji: '💐', title: '花束植物图鉴', source: 'Pinterest Flower Illustration', link: 'https://www.pinterest.com/search/?q=flower+illustration+botanical+procreate' },
+  { emoji: '🎮', title: '游戏UI图标设计', source: 'Behance Game UI Icon', link: 'https://www.behance.net/search/projects/game+icon+illustration+flat' },
+  { emoji: '🛍️', title: '购物袋印花设计', source: 'Pinterest Tote Bag Art', link: 'https://www.pinterest.com/search/?q=tote+bag+illustration+design+commercial' },
+  { emoji: '🌈', title: '彩虹渐变系列', source: 'Dribbble Rainbow Art', link: 'https://dribbble.com/search/rainbow-illustration-gradient' },
+  { emoji: '📚', title: '文具产品插画', source: 'Pinterest Stationery Art', link: 'https://www.pinterest.com/search/?q=stationery+illustration+commercial+procreate' },
+  { emoji: '🐾', title: '宠物用品插画', source: 'Behance Pet Brand', link: 'https://www.behance.net/search/projects/pet+brand+illustration' },
+  { emoji: '🎯', title: '极简线条头像', source: '小红书 #线条头像', link: 'https://www.xiaohongshu.com/search_result?keyword=线条头像定制插画' },
+  { emoji: '🌙', title: '晚安治愈系列', source: 'Pinterest Goodnight Art', link: 'https://www.pinterest.com/search/?q=goodnight+illustration+cute+procreate' },
+  { emoji: '👜', title: '包包印花图案', source: 'Dribbble Bag Pattern', link: 'https://dribbble.com/search/bag-pattern-illustration' },
+  { emoji: '🍃', title: '夏日清新插画', source: 'Behance Summer Vibes', link: 'https://www.behance.net/search/projects/summer+illustration+commercial' },
+  { emoji: '👑', title: '公主风角色设计', source: 'Pinterest Princess Art', link: 'https://www.pinterest.com/search/?q=princess+character+design+illustration' },
+  { emoji: '📅', title: '日历插画设计', source: 'Behance Calendar Art', link: 'https://www.behance.net/search/projects/calendar+illustration+2026' },
+  { emoji: '🧁', title: '甜点水彩风格', source: 'Pinterest Watercolor Cake', link: 'https://www.pinterest.com/search/?q=watercolor+cake+illustration+procreate' },
+  { emoji: '🦊', title: '森林动物系列', source: 'Dribbble Forest Animals', link: 'https://dribbble.com/search/forest-animals-illustration' },
+  { emoji: '💌', title: '情书/明信片风', source: 'Pinterest Love Letter Art', link: 'https://www.pinterest.com/search/?q=love+letter+illustration+romantic' },
+  { emoji: '🏖️', title: '海滩度假插画', source: 'Behance Beach Vacation', link: 'https://www.behance.net/search/projects/beach+vacation+illustration' },
+  { emoji: '🧩', title: '拼图风格构图', source: 'Pinterest Collage Art', link: 'https://www.pinterest.com/search/?q=collage+illustration+procreate+commercial' },
+  { emoji: '🎭', title: '表情包设计', source: '小红书 #表情包插画', link: 'https://www.xiaohongshu.com/search_result?keyword=表情包设计插画' },
+  { emoji: '🏰', title: '城堡童话风', source: 'Dribbble Fairytale Art', link: 'https://dribbble.com/search/fairytale-illustration-castle' },
+  { emoji: '📱', title: '手机壳图案设计', source: 'Pinterest Phone Case Art', link: 'https://www.pinterest.com/search/?q=phone+case+illustration+design+commercial' },
+  { emoji: '⭐', title: '星星月亮宇宙', source: 'Behance Space Art', link: 'https://www.behance.net/search/projects/space+illustration+cute' },
+];
+
+// ============================================================
+// VIRAL ANALYSIS DATA (20 viral commercial illustration posts)
+// ============================================================
+const VIRAL_POSTS = [
+  { num: '01', title: '「我用Procreate画了100张头像，月入过万」', formula: '🎯 爆款公式：个人经历数字 + 成果展示 + 价格锚点\n📝 标题：数字+收入 双重刺激\n🖼️ 封面：9宫格头像展示，统一风格\n💬 互动钩子：「你最喜欢哪一张？评论区告诉我」\n🏷️ 标签：#procreate #头像定制 #插画接单 #副业' },
+  { num: '02', title: '「3步画出超治愈的奶茶插画」', formula: '🎯 爆款公式：教程数字 + 热门品类 + 超简单承诺\n📝 封面：成品图+大标题文字\n🖼️ 内容：步骤拆解图（每步一张图）\n💬 钩子：「学会了吗？@你的闺蜜来学」\n🏷️ 标签：#procreate教程 #奶茶插画 #零基础学画画' },
+  { num: '03', title: '「iPad画画一年，我的变化有多大」', formula: '🎯 爆款公式：对比图 + 时间线 + 情感共鸣\n📝 封面：Before/After 对比图\n🖼️ 内容：按月的进步过程拼图\n💬 钩子：「你学画画多久了？」\n🏷️ 标签：#iPad画画 #插画成长 #procreate #坚持' },
+  { num: '04', title: '「把客户照片画成插画，一单300」', formula: '🎯 爆款公式：真实客单展示 + 价格透明 + 信任建立\n📝 封面：真人照片vs插画对比\n🖼️ 内容：多组客户案例展示\n💬 钩子：「想定制同款？主页有联系方式」\n🏷️ 标签：#插画定制 #照片转插画 #副业 #接单' },
+  { num: '05', title: '「商业插画师必备的5个接单渠道」', formula: '🎯 爆款公式：干货合集 + 痛点解决 + 收藏价值\n📝 封面：大字标题+信息图\n🖼️ 内容：每个渠道配截图+说明\n💬 钩子：「收藏起来慢慢看！」\n🏷️ 标签：#商业插画 #接单渠道 #自由职业 #插画师' },
+  { num: '06', title: '「超简单！Procreate画贴纸的全流程」', formula: '🎯 爆款公式：过程透明化 + 工具教学 + 变现路径\n📝 封面：成品贴纸实拍图\n🖼️ 内容：从草稿→线稿→上色→印刷 全流程\n💬 钩子：「想看印刷教程的扣1」\n🏷️ 标签：#贴纸设计 #procreate教程 #文创 #手帐' },
+  { num: '07', title: '「我的插画被品牌买走了，经历了什么」', formula: '🎯 爆款公式：真实故事 + 品牌合作 + 经验分享\n📝 封面：合同/成品/聊天截图拼图\n🖼️ 内容：时间线叙事+报价建议\n💬 钩子：「你们觉得这个报价合理吗？」\n🏷️ 标签：#商业插画 #品牌合作 #插画师 #报价' },
+  { num: '08', title: '「iPad必装的10个画画辅助APP」', formula: '🎯 爆款公式：工具推荐 + 效率提升 + 收藏型内容\n📝 封面：APP图标合集+大字标题\n🖼️ 内容：每个APP功能简介+使用场景\n💬 钩子：「第7个真的好用，你们呢？」\n🏷️ 标签：#iPad绘画 #画画app #procreate #插画工具' },
+  { num: '09', title: '「画了50款新年红包封面，全部免费送」', formula: '🎯 爆款公式：免费福利 + 节日热点 + 裂变传播\n📝 封面：红包封面成品图精选\n🖼️ 内容：多款展示+领取方式\n💬 钩子：「评论区留言序号，我私你」\n🏷️ 标签：#红包封面 #免费 #新年插画 #福利' },
+  { num: '10', title: '「不会画画的我也能出图？AI+手绘结合」', formula: '🎯 爆款公式：技术热点 + 效率对比 + 降维打击\n📝 封面：AI初稿vs手绘成品对比\n🖼️ 内容：AI辅助流程+手绘优化步骤\n💬 钩子：「AI会替代插画师吗？聊聊你的看法」\n🏷️ 标签：#AI绘画 #procreate #插画效率 #人工智能' },
+  { num: '11', title: '「月入2万的插画师，每天在做什么」', formula: '🎯 爆款公式：收入揭秘 + 日常Vlog + 向往感\n📝 封面：工作台+收入截图\n🖼️ 内容：时间表+工作内容+收入来源拆解\n💬 钩子：「你想做全职还是兼职插画师？」\n🏷️ 标签：#插画师日常 #自由职业 #收入 #工作台' },
+  { num: '12', title: '「甲方最爱的3种商业插画风格」', formula: '🎯 爆款公式：甲方视角 + 风格对比 + 实用性\n📝 封面：三种风格代表作对比\n🖼️ 内容：每种风格特点+适用场景+报价区间\n💬 钩子：「你擅长哪种风格？」\n🏷️ 标签：#商业插画 #插画风格 #甲方 #接单技巧' },
+  { num: '13', title: '「Procreate笔刷分享｜这5个笔刷太好用了」', formula: '🎯 爆款公式：资源分享 + 效果展示 + 引导关注\n📝 封面：笔刷效果对比图\n🖼️ 内容：每个笔刷画一笔展示效果\n💬 钩子：「三连后私信我领取笔刷包」\n🏷️ 标签：#procreate笔刷 #笔刷分享 #免费资源 #插画' },
+  { num: '14', title: '「从0开始学商业插画，一年够了」', formula: '🎯 爆款公式：成长路径 + 学习资源 + 时间线\n📝 封面：月度进步对比图\n🖼️ 内容：每月学习重点+练习作业展示\n💬 钩子：「你现在在哪个阶段？」\n🏷️ 标签：#零基础学插画 #商业插画 #学习规划 #成长' },
+  { num: '15', title: '「把我画的图案印在T恤上，居然卖了200件」', formula: '🎯 爆款公式：实物化展示 + 销售数据 + 变现惊喜\n📝 封面：T恤上身效果图\n🖼️ 内容：设计图→打样→成品→销售数据\n💬 钩子：「你喜欢第几款？链接在主页」\n🏷️ 标签：#插画周边 #T恤设计 #文创 #变现' },
+  { num: '16', title: '「iPad画画新手必看：10个常见错误」', formula: '🎯 爆款公式：避坑指南 + 新手痛点 + 解决方案\n📝 封面：错误vs正确对比图\n🖼️ 内容：每个错误配图+改正方法\n💬 钩子：「你中了几个？评论区说说」\n🏷️ 标签：#iPad画画 #新手教程 #procreate #避坑' },
+  { num: '17', title: '「一个插画师的多管道收入模型」', formula: '🎯 爆款公式：收入模型 + 多元化 + 可复制性\n📝 封面：收入结构饼图/信息图\n🖼️ 内容：每个收入渠道详解+启动难度\n💬 钩子：「你目前有几个收入来源？」\n🏷️ 标签：#插画变现 #多管道收入 #副业 #自由职业' },
+  { num: '18', title: '「用iPad给女儿画的成长绘本」', formula: '🎯 爆款公式：亲情故事 + 原创作品 + 情感共鸣\n📝 封面：绘本精选页面展示\n🖼️ 内容：绘本翻页视频+创作背景\n💬 钩子：「你也会给孩子画吗？」\n🏷️ 标签：#绘本 #亲子 #原创插画 #iPad画画' },
+  { num: '19', title: '「商业插画报价单公开｜别再被压价了」', formula: '🎯 爆款公式：价格透明 + 行业标准 + 自我保护\n📝 封面：报价单截图/表格\n🖼️ 内容：按项目类型分级报价+谈判技巧\n💬 钩子：「你们觉得这个价格合理吗？」\n🏷️ 标签：#插画报价 #商业插画 #接单 #报价单' },
+  { num: '20', title: '「用Procreate做了一套微信表情包，审核一次过」', formula: '🎯 爆款公式：成果展示 + 全流程 + 平台规则\n📝 封面：表情包在微信中的截图\n🖼️ 内容：制作流程+尺寸规范+审核经验\n💬 钩子：「想要表情包的评论区扣1」\n🏷️ 标签：#微信表情包 #procreate #表情包制作 #审核' },
+];
+
+// ============================================================
+// LEARNING PATH
+// ============================================================
+const LEARNING_PATH = [
+  { day: 1, icon: '✍️', title: '线条练习日', desc: '练100条流畅曲线，掌握Procreate笔压', color: 'rgba(255,107,157,0.2)', link: 'https://www.bilibili.com/video/BV1oJ4m1j7iV', linkText: 'B站：Procreate线条控笔练习' },
+  { day: 2, icon: '🎨', title: '配色基础日', desc: '学3种商业插画配色方案（莫兰迪/多巴胺/马卡龙）', color: 'rgba(199,125,255,0.2)', link: 'https://www.bilibili.com/video/BV1Jj411T7aB', linkText: 'B站：商业插画配色教程' },
+  { day: 3, icon: '📐', title: '构图训练日', desc: '分析5张商业插画的构图方式（对称/S形/三分法）', color: 'rgba(76,201,240,0.2)', link: 'https://www.bilibili.com/video/BV1jG411k7iS', linkText: 'B站：插画构图技巧' },
+  { day: 4, icon: '🌿', title: '扁平风练习', desc: '临摹3张扁平风商业插画（植物/食物/小物件）', color: 'rgba(6,214,160,0.2)', link: 'https://www.xiaohongshu.com/search_result?keyword=扁平风插画教程procreate', linkText: '小红书：扁平风插画教程' },
+  { day: 5, icon: '👤', title: '人物基础日', desc: '学画Q版人物头像（头身比/五官简化）', color: 'rgba(255,140,66,0.2)', link: 'https://www.bilibili.com/video/BV1jN4y1U7jW', linkText: 'B站：Q版人物画法教程' },
+  { day: 6, icon: '🖌️', title: '笔刷探索日', desc: '自制3款商业插画常用笔刷（纹理/渐变/勾线）', color: 'rgba(247,37,133,0.2)', link: 'https://www.bilibili.com/video/BV1Em4y1W7rT', linkText: 'B站：Procreate笔刷制作' },
+  { day: 7, icon: '📝', title: '原创挑战日', desc: '综合本周所学，创作1张完整商业插画', color: 'rgba(91,141,239,0.2)', link: 'https://www.xiaohongshu.com/search_result?keyword=商业插画原创procreate', linkText: '小红书：商业插画原创参考' },
+  { day: 8, icon: '📱', title: '贴纸设计日', desc: '学做一套6枚主题贴纸（从草图到成品）', color: 'rgba(255,107,157,0.2)', link: 'https://www.bilibili.com/video/BV1Vm4y1J7XT', linkText: 'B站：Procreate贴纸设计全流程' },
+  { day: 9, icon: '🎭', title: '表情包制作', desc: '设计一套原创表情包（8-16个表情）', color: 'rgba(199,125,255,0.2)', link: 'https://www.bilibili.com/video/BV1oN4y1U7rK', linkText: 'B站：微信表情包制作教程' },
+  { day: 10, icon: '🖼️', title: '海报设计日', desc: '为虚拟品牌设计一张商业海报插画', color: 'rgba(76,201,240,0.2)', link: 'https://www.behance.net/search/projects/poster+illustration+commercial', linkText: 'Behance：商业海报插画参考' },
+  { day: 11, icon: '📦', title: '包装设计日', desc: '学做产品包装插画（奶茶杯/零食袋）', color: 'rgba(255,140,66,0.2)', link: 'https://www.bilibili.com/video/BV1Bu4m1w7aZ', linkText: 'B站：产品包装插画设计' },
+  { day: 12, icon: '💻', title: 'UI插画日', desc: '学画APP引导页/空白页插画', color: 'rgba(6,214,160,0.2)', link: 'https://www.bilibili.com/video/BV1YW4y1w7HG', linkText: 'B站：UI插画设计教程' },
+  { day: 13, icon: '📖', title: '绘本页练习', desc: '创作一页完整儿童绘本插画', color: 'rgba(247,37,133,0.2)', link: 'https://www.bilibili.com/video/BV1vN4y1U7QF', linkText: 'B站：儿童绘本插画教程' },
+  { day: 14, icon: '🏆', title: '作品集整理', desc: '整理两周作品，发布小红书+建立作品集', color: 'rgba(91,141,239,0.2)', link: 'https://www.xiaohongshu.com/search_result?keyword=插画作品集排版', linkText: '小红书：插画作品集排版参考' },
+];
+
+// ============================================================
+// UTILS
+// ============================================================
+function F(n) { return '¥' + Number(n).toFixed(2); }
+function toast(msg) {
+  const c = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = 'toast'; el.textContent = msg;
+  c.appendChild(el);
+  setTimeout(() => el.remove(), 2000);
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+let currentPage = 'dashboard';
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentPage = btn.dataset.page;
+    renderPage(currentPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// ============================================================
+// RENDER ENGINE
+// ============================================================
+function renderPage(page) {
+  const main = document.getElementById('mainContent');
+  switch(page) {
+    case 'dashboard': main.innerHTML = renderDashboard(); break;
+    case 'taobao-hot': main.innerHTML = renderTaobaoHot(); break;
+    case 'taobao-orders': main.innerHTML = renderTaobaoOrders(); break;
+    case 'taobao-products': main.innerHTML = renderTaobaoProducts(); break;
+    case 'taobao-profit': main.innerHTML = renderTaobaoProfit(); break;
+    case 'xhs-inspo': main.innerHTML = renderXhsInspo(); break;
+    case 'xhs-learning': main.innerHTML = renderXhsLearning(); break;
+    case 'xhs-viral': main.innerHTML = renderXhsViral(); break;
+    case 'xhs-calendar': main.innerHTML = renderXhsCalendar(); break;
+    case 'xhs-license': main.innerHTML = renderXhsLicense(); break;
+    case 'xhs-analytics': main.innerHTML = renderXhsAnalytics(); break;
+    case 'work-reports': main.innerHTML = renderWorkReports(); break;
+    case 'work-schedule': main.innerHTML = renderWorkSchedule(); break;
+    case 'side-hustle': main.innerHTML = renderSideHustle(); break;
+  }
+  bindPageEvents(page);
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const totalProfit = data.orders.filter(o => o.status !== '已取消').reduce((s, o) => s + o.profit, 0);
+  const totalLicense = data.licenses.reduce((s, l) => s + l.amount, 0);
+  const savingsRemaining = data.savings.target - data.savings.current;
+  const savingsPct = (data.savings.current / data.savings.target * 100).toFixed(1);
+  const today = new Date().toISOString().split('T')[0];
+  const todaySched = data.schedules.filter(s => s.date === today);
+
+  const mottos = ['💪 今天也要加油攒钱！', '🐰 兔子姐姐冲冲冲', '👩‍🎨 离独立插画师又近一步', '📦 今天会有几单呢？', '🌟 Orange在等你回家', '💰 搞钱的每一天都值得'];
+  const motto = mottos[new Date().getDay() % mottos.length];
+
+  return `
+    <div class="hero">
+      <h2>👋 嗨，兔子姐姐！</h2>
+      <p>${motto}</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-item pink">
+        <div class="si-label">💰 累计收入</div>
+        <div class="si-value">${F(totalProfit + totalLicense)}</div>
+        <div class="si-sub">淘宝+授权</div>
+      </div>
+      <div class="stat-item purple">
+        <div class="si-label">🎨 小红书粉丝</div>
+        <div class="si-value">${data.xhsData.followers}</div>
+        <div class="si-sub">${data.xhsData.growth} 本周</div>
+      </div>
+      <div class="stat-item cyan">
+        <div class="si-label">📦 本月订单</div>
+        <div class="si-value">${data.orders.length}</div>
+        <div class="si-sub">利润 ${F(totalProfit)}</div>
+      </div>
+      <div class="stat-item orange">
+        <div class="si-label">📝 待处理</div>
+        <div class="si-value">${data.reports.filter(r=>r.status!=='已完成').length + data.schedules.filter(s=>!s.done).length}</div>
+        <div class="si-sub">报导+日程</div>
+      </div>
+    </div>
+
+    <div class="goal-card">
+      <div class="gc-header">
+        <div class="gc-label">🏠 家庭目标</div>
+        <div class="gc-value">${(savingsRemaining/10000).toFixed(1)}万</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${savingsPct}%"></div></div>
+      <div class="gc-sub">已达成 ${(data.savings.current/10000).toFixed(1)}万 (${savingsPct}%) · 月攒目标 ${F(data.savings.monthly)}</div>
+    </div>
+
+    <div class="quick-actions">
+      <div class="qa-btn" onclick="navigateTo('taobao-hot')">
+        <div class="qa-icon">🔥</div>
+        <div class="qa-label">爆款选品</div>
+      </div>
+      <div class="qa-btn" onclick="navigateTo('xhs-inspo')">
+        <div class="qa-icon">💡</div>
+        <div class="qa-label">每日灵感</div>
+      </div>
+      <div class="qa-btn" onclick="navigateTo('xhs-viral')">
+        <div class="qa-icon">🚀</div>
+        <div class="qa-label">爆款拆解</div>
+      </div>
+      <div class="qa-btn" onclick="navigateTo('xhs-learning')">
+        <div class="qa-icon">📚</div>
+        <div class="qa-label">学习路径</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📅 今日日程</div>
+        <button class="btn btn-outline btn-sm" onclick="showModal('addSchedule')">+ 添加</button>
+      </div>
+      ${todaySched.length === 0 ? '<div class="empty"><p>今天暂无安排~</p></div>' :
+        todaySched.map(s => `
+          <div class="sched-item">
+            <span class="si-time">${s.time}</span>
+            <span style="flex:1;">${s.title}</span>
+            <span class="tag tag-${s.type==='主业'?'purple':s.type==='淘宝'?'pink':'cyan'}">${s.type}</span>
+          </div>
+        `).join('')
+      }
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">📦 最近订单</div></div>
+      ${data.orders.slice(0, 3).map(o => `
+        <div class="order-item">
+          <span>${o.product}</span>
+          <span style="font-size:0.7rem;color:var(--text-muted);">${o.date}</span>
+          <span class="oi-amount">+${F(o.profit)}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ============================================================
+// TAOBAO HOT PRODUCTS
+// ============================================================
+function renderTaobaoHot() {
+  const copied = data.copiedProducts || [];
+  return `
+    <div class="hero" style="background:linear-gradient(135deg,#ff6b9d,#ff8c42);">
+      <h2>🔥 1688爆款饰品精选</h2>
+      <p>20款高利润饰品 · 可直接搬运到淘宝 · 利润率79%-88%</p>
+    </div>
+
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;">
+      <span class="tag tag-pink" style="cursor:pointer;" onclick="filterHot('all')">全部</span>
+      <span class="tag tag-orange" style="cursor:pointer;" onclick="filterHot('耳饰')">耳饰</span>
+      <span class="tag tag-purple" style="cursor:pointer;" onclick="filterHot('项链')">项链</span>
+      <span class="tag tag-cyan" style="cursor:pointer;" onclick="filterHot('手链')">手链</span>
+      <span class="tag tag-mint" style="cursor:pointer;" onclick="filterHot('发饰')">发饰</span>
+      <span class="tag tag-yellow" style="cursor:pointer;" onclick="filterHot('戒指')">戒指</span>
+    </div>
+
+    <div id="hotProductList">
+      ${renderHotProductList('all')}
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header"><div class="card-title">📊 选品分析</div></div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>💎 <b>高利润区间</b>：成本3-8元 → 售价20-40元 → 利润率80%+</p>
+        <p>🔥 <b>热门品类</b>：耳饰 > 项链 > 手链 > 发饰 > 戒指</p>
+        <p>📈 <b>搜索趋势</b>：法式复古、Y2K千禧风、新中式国风</p>
+        <p>💡 <b>定价策略</b>：1688成本×4-6倍 = 淘宝售价</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:10px;">
+      <div class="card-header"><div class="card-title">🛒 已搬运产品</div></div>
+      ${copied.length === 0 ? '<div class="empty"><p>点击产品卡片上的"搬运"按钮添加到我的选品</p></div>' :
+        copied.map(c => `<div style="font-size:0.82rem;padding:6px 0;border-bottom:1px solid rgba(74,58,110,0.3);">✅ ${c}</div>`).join('')
+      }
+    </div>
+  `;
+}
+
+function renderHotProductList(filter) {
+  const list = filter === 'all' ? HOT_PRODUCTS : HOT_PRODUCTS.filter(p => p.cat === filter);
+  return list.map(p => `
+    <div class="prod-card">
+      <div class="pc-top">
+        <div class="pc-rank ${p.heat}">${p.rank}</div>
+        <div class="pc-info">
+          <div class="pc-name">${p.name}</div>
+          <div class="pc-tags">
+            <span class="tag tag-pink">${p.cat}</span>
+            <span class="tag tag-yellow">${p.margin}</span>
+            <span style="font-size:0.65rem;color:var(--cyan);">${p.trend}</span>
+          </div>
+        </div>
+      </div>
+      <div class="pc-price-row">
+        <span class="pc-cost">成本 ${F(p.cost)}</span>
+        <span class="pc-sell">卖 ${F(p.sell)}</span>
+        <span class="pc-profit">赚 ${F(p.profit)}</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px;">
+        <button class="btn btn-primary btn-sm" style="flex:1;" onclick="copyProduct('${p.name}', ${p.cost}, ${p.sell})">📋 搬运到店铺</button>
+        <button class="copy-btn" onclick="copyToClipboard('${p.name} 成本${p.cost} 售价${p.sell} 利润${p.profit}')">复制</button>
+      </div>
+      <div style="font-size:0.65rem;color:var(--text-muted);margin-top:6px;">🔑 关键词：${p.keyword} · 货源：${p.source}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// XHS INSPIRATION
+// ============================================================
+function renderXhsInspo() {
+  return `
+    <div class="hero" style="background:linear-gradient(135deg,#c77dff,#4cc9f0);">
+      <h2>💡 每日灵感库</h2>
+      <p>50张商业插画灵感 · 点卡片跳转原网站 · 每天刷一遍</p>
+    </div>
+
+    <div class="motto">🎯 今日任务：浏览全部50张灵感图，收藏3张最心动的开始临摹</div>
+
+    <div class="inspo-grid">
+      ${INSPIRATIONS.map((ins, i) => `
+        <div class="inspo-card" onclick="openLink('${ins.link}')">
+          <div class="ic-emoji">${ins.emoji}</div>
+          <div class="ic-title">${ins.title}</div>
+          <div class="ic-source">${ins.source}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header"><div class="card-title">🎨 灵感使用指南</div></div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>1️⃣ 每天花15分钟浏览今日灵感图</p>
+        <p>2️⃣ 收藏3-5张最喜欢的到iPad相册</p>
+        <p>3️⃣ 分析构图、配色、风格特点</p>
+        <p>4️⃣ 选择1张进行临摹练习（30分钟）</p>
+        <p>5️⃣ 周末用学到的技法创作1张原创</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// XHS LEARNING
+// ============================================================
+function renderXhsLearning() {
+  return `
+    <div class="hero" style="background:linear-gradient(135deg,#06d6a0,#4cc9f0);">
+      <h2>📚 14天商业插画成长计划</h2>
+      <p>Procreate · iPad绘画 · 从基础到接单 · 每天一课</p>
+    </div>
+
+    <div class="motto">🐰 兔子姐姐，坚持14天，你会看到不一样的自己！</div>
+
+    ${LEARNING_PATH.map(l => `
+      <div class="learn-card" onclick="openLink('${l.link}')">
+        <div class="lc-icon" style="background:${l.color};">${l.icon}</div>
+        <div class="lc-info">
+          <div class="lc-title">Day ${l.day} · ${l.title}</div>
+          <div class="lc-desc">${l.desc}</div>
+          <div class="lc-link">🔗 ${l.linkText}</div>
+        </div>
+      </div>
+    `).join('')}
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header"><div class="card-title">🎯 进阶路径</div></div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>📌 <b>第1-2周</b>：基础功（线条/配色/构图）</p>
+        <p>📌 <b>第3-4周</b>：风格专项（扁平/水彩/矢量）</p>
+        <p>📌 <b>第5-6周</b>：商业项目（贴纸/海报/包装）</p>
+        <p>📌 <b>第7-8周</b>：接单实战（定价/沟通/交付）</p>
+        <p>📌 <b>长期目标</b>：月入5000+ 独立插画师</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// XHS VIRAL
+// ============================================================
+function renderXhsViral() {
+  return `
+    <div class="hero" style="background:linear-gradient(135deg,#f72585,#ff6b9d);">
+      <h2>🚀 爆款笔记拆解</h2>
+      <p>20条商业插画爆款 · 公式拆解 · 直接复制到小红书</p>
+    </div>
+
+    <div class="motto">💡 爆款 = 好标题 + 好封面 + 互动钩子 + 精准标签</div>
+
+    ${VIRAL_POSTS.map(v => `
+      <div class="viral-card">
+        <div class="vc-num">🔥 爆款 #${v.num}</div>
+        <div class="vc-title">${v.title}</div>
+        <div class="vc-formula">${v.formula.replace(/\n/g, '<br>')}</div>
+        <button class="copy-btn" style="margin-top:8px;" onclick="copyToClipboard(\`${v.title.replace(/`/g,'\\`')}
+
+${v.formula.replace(/`/g,'\\`')}\`)">📋 复制爆款公式</button>
+      </div>
+    `).join('')}
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header"><div class="card-title">📊 爆款规律总结</div></div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>🔑 <b>标题公式</b>：数字 + 结果 + 好奇心 = 高点击</p>
+        <p>🖼️ <b>封面铁律</b>：大文字 + 成品图 + 统一风格</p>
+        <p>💬 <b>互动钩子</b>：提问句结尾 > 陈述句结尾</p>
+        <p>🏷️ <b>标签策略</b>：3个热门 + 2个精准 + 1个长尾</p>
+        <p>⏰ <b>发布时间</b>：工作日 12:00-13:00 / 18:00-20:00</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// TAOBAO ORDERS
+// ============================================================
+function renderTaobaoOrders() {
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="sec-title" style="margin:0;">📦 订单管理</div>
+      <button class="btn btn-primary btn-sm" onclick="showModal('addOrder')">+ 新增</button>
+    </div>
+    <div class="card">
+      ${data.orders.map((o, i) => `
+        <div class="order-item">
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:0.82rem;">${o.product}</div>
+            <div style="font-size:0.68rem;color:var(--text-muted);">${o.date} · 成本${F(o.cost)} → 售价${F(o.price)}</div>
+          </div>
+          <span class="oi-amount">+${F(o.profit)}</span>
+          <span class="tag tag-${o.status==='已签收'?'mint':o.status==='已发货'?'yellow':'pink'}" style="margin-left:6px;">${o.status}</span>
+          <button class="btn btn-outline btn-sm" style="margin-left:4px;padding:4px 8px;font-size:0.65rem;" onclick="deleteOrder(${i})">✕</button>
+        </div>
+      `).join('')}
+      ${data.orders.length===0?'<div class="empty"><p>暂无订单</p></div>':''}
+    </div>
+  `;
+}
+
+// ============================================================
+// TAOBAO PRODUCTS
+// ============================================================
+function renderTaobaoProducts() {
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="sec-title" style="margin:0;">🔍 我的选品</div>
+      <button class="btn btn-primary btn-sm" onclick="showModal('addProduct')">+ 添加</button>
+    </div>
+    ${data.products.map((p, i) => `
+      <div class="prod-card">
+        <div class="pc-top">
+          <div class="pc-info" style="flex:1;">
+            <div class="pc-name">${p.name}</div>
+            <div class="pc-tags">
+              <span class="tag tag-pink">${p.source}</span>
+              <span class="tag tag-${p.status==='已上架'?'mint':'yellow'}">${p.status}</span>
+            </div>
+          </div>
+        </div>
+        <div class="pc-price-row">
+          <span class="pc-cost">成本 ${F(p.sourcePrice)}</span>
+          <span class="pc-sell">卖 ${F(p.targetPrice)}</span>
+          <span class="pc-profit">${p.margin}</span>
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-top:6px;color:var(--danger);border-color:var(--danger);" onclick="deleteProduct(${i})">删除</button>
+      </div>
+    `).join('')}
+    ${data.products.length===0?'<div class="empty"><p>还没有选品，去「爆款选品」搬运吧！</p></div>':''}
+  `;
+}
+
+// ============================================================
+// TAOBAO PROFIT
+// ============================================================
+function renderTaobaoProfit() {
+  const totalProfit = data.orders.filter(o => o.status !== '已取消').reduce((s, o) => s + o.profit, 0);
+  const totalRevenue = data.orders.filter(o => o.status !== '已取消').reduce((s, o) => s + o.price, 0);
+  const avgMargin = totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100).toFixed(1) : '0';
+
+  const monthly = {};
+  data.orders.forEach(o => {
+    const m = o.date.substring(0, 7);
+    if (!monthly[m]) monthly[m] = { revenue: 0, profit: 0, count: 0 };
+    monthly[m].revenue += o.price;
+    monthly[m].profit += o.profit;
+    monthly[m].count += 1;
+  });
+
+  return `
+    <div class="sec-title">💰 利润分析</div>
+
+    <div class="stat-row">
+      <div class="stat-item pink"><div class="si-label">总利润</div><div class="si-value">${F(totalProfit)}</div></div>
+      <div class="stat-item purple"><div class="si-label">总营收</div><div class="si-value">${F(totalRevenue)}</div></div>
+      <div class="stat-item cyan"><div class="si-label">利润率</div><div class="si-value">${avgMargin}%</div></div>
+      <div class="stat-item orange"><div class="si-label">总订单</div><div class="si-value">${data.orders.length}</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">📅 月度汇总</div></div>
+      ${Object.entries(monthly).sort().reverse().map(([m, d]) => `
+        <div class="order-item">
+          <span style="font-weight:600;">${m}</span>
+          <span style="font-size:0.7rem;color:var(--text-muted);">${d.count}单</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto;margin-right:8px;">营收${F(d.revenue)}</span>
+          <span class="oi-amount">+${F(d.profit)}</span>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="card" style="margin-top:10px;">
+      <div class="card-header"><div class="card-title">💡 提升销量建议</div></div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>📌 <b>标题优化</b>：加入热搜关键词（法式/ins风/Y2K/小众设计）</p>
+        <p>📌 <b>主图优化</b>：白底+模特佩戴+细节特写 3张组合</p>
+        <p>📌 <b>定价策略</b>：设置满2件包邮，提高客单价</p>
+        <p>📌 <b>评价管理</b>：主动邀请买家晒图评价</p>
+        <p>📌 <b>上新频率</b>：每周至少上3款新品保持活跃</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// XHS CALENDAR
+// ============================================================
+function renderXhsCalendar() {
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="sec-title" style="margin:0;">📅 内容日历</div>
+      <button class="btn btn-primary btn-sm" onclick="showModal('addXhsPost')">+ 添加</button>
+    </div>
+    ${data.xhsPosts.map((p, i) => `
+      <div class="viral-card" style="border-left-color:var(--cyan);">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-weight:700;">${p.title}</span>
+          <span class="tag tag-${p.status==='已发布'?'mint':p.status==='待发布'?'yellow':'purple'}">${p.status}</span>
+        </div>
+        <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">${p.date} · ${p.type}</div>
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          ${p.status!=='已发布'?`<button class="btn btn-outline btn-sm" onclick="updateXhsStatus(${i})">✅ 标记发布</button>`:''}
+          <button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger);" onclick="deleteXhsPost(${i})">删除</button>
+        </div>
+      </div>
+    `).join('')}
+    ${data.xhsPosts.length===0?'<div class="empty"><p>还没有内容计划</p></div>':''}
+  `;
+}
+
+// ============================================================
+// XHS LICENSE
+// ============================================================
+function renderXhsLicense() {
+  const total = data.licenses.reduce((s, l) => s + l.amount, 0);
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="sec-title" style="margin:0;">🎨 授权记录</div>
+      <button class="btn btn-primary btn-sm" onclick="showModal('addLicense')">+ 添加</button>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item pink"><div class="si-label">授权收入</div><div class="si-value">${F(total)}</div></div>
+      <div class="stat-item purple"><div class="si-label">授权次数</div><div class="si-value">${data.licenses.length}</div></div>
+    </div>
+    ${data.licenses.map((l, i) => `
+      <div class="order-item">
+        <div style="flex:1;">
+          <div style="font-weight:600;">${l.buyer}</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);">${l.date} · ${l.type}</div>
+        </div>
+        <span class="oi-amount">+${F(l.amount)}</span>
+        <button class="btn btn-outline btn-sm" style="margin-left:6px;padding:4px 8px;font-size:0.65rem;color:var(--danger);border-color:var(--danger);" onclick="deleteLicense(${i})">✕</button>
+      </div>
+    `).join('')}
+    ${data.licenses.length===0?'<div class="empty"><p>还没有授权记录</p></div>':''}
+  `;
+}
+
+// ============================================================
+// XHS ANALYTICS
+// ============================================================
+function renderXhsAnalytics() {
+  const d = data.xhsData;
+  return `
+    <div class="sec-title">📈 账号数据</div>
+    <div class="stat-row">
+      <div class="stat-item pink"><div class="si-label">粉丝</div><div class="si-value">${d.followers}</div><div class="si-sub">${d.growth} 本周</div></div>
+      <div class="stat-item purple"><div class="si-label">获赞</div><div class="si-value">${d.totalLikes}</div></div>
+      <div class="stat-item cyan"><div class="si-label">笔记</div><div class="si-value">${d.totalPosts}</div></div>
+      <div class="stat-item orange"><div class="si-label">均赞</div><div class="si-value">${d.totalPosts>0?Math.round(d.totalLikes/d.totalPosts):0}</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">💡 涨粉建议</div></div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>🐰 每周至少发2篇，保持活跃</p>
+        <p>🎨 蹭热点话题+统一封面风格</p>
+        <p>💬 积极回复评论互动</p>
+        <p>🏷️ 使用 #插画 #procreate #商业插画 等标签</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// WORK REPORTS
+// ============================================================
+function renderWorkReports() {
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="sec-title" style="margin:0;">📝 报导撰写</div>
+      <button class="btn btn-primary btn-sm" onclick="showModal('addReport')">+ 新建</button>
+    </div>
+    ${data.reports.map((r, i) => `
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span class="tag tag-${r.status==='已完成'?'mint':r.status==='撰写中'?'yellow':'purple'}">${r.status}</span>
+          <span style="font-size:0.7rem;color:var(--text-muted);">${r.date}截止</span>
+        </div>
+        <div style="font-weight:700;margin-bottom:4px;">${r.title}</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);">📂 ${r.category}</div>
+        ${r.content?`<div style="font-size:0.75rem;background:var(--bg-input);padding:10px;border-radius:8px;margin:8px 0;max-height:80px;overflow-y:auto;white-space:pre-wrap;color:var(--text-muted);">${r.content}</div>`:''}
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          <button class="btn btn-outline btn-sm" onclick="editReport(${i})">✏️ 编辑</button>
+          ${r.status!=='已完成'?`<button class="btn btn-primary btn-sm" onclick="markReportDone(${i})">✅ 完成</button>`:''}
+          <button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger);" onclick="deleteReport(${i})">删除</button>
+        </div>
+      </div>
+    `).join('')}
+    ${data.reports.length===0?'<div class="empty"><p>还没有报导</p></div>':''}
+  `;
+}
+
+// ============================================================
+// WORK SCHEDULE
+// ============================================================
+function renderWorkSchedule() {
+  const sorted = [...data.schedules].sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="sec-title" style="margin:0;">🗓️ 日程管理</div>
+      <button class="btn btn-primary btn-sm" onclick="showModal('addSchedule')">+ 添加</button>
+    </div>
+    ${sorted.map((s, i) => {
+      const origIdx = data.schedules.indexOf(s);
+      return `
+      <div class="sched-item" style="${s.done?'opacity:0.5':''}">
+        <span class="si-time">${s.time}</span>
+        <span style="flex:1;${s.done?'text-decoration:line-through':''}">${s.title}</span>
+        <span class="tag tag-${s.type==='主业'?'purple':s.type==='淘宝'?'pink':s.type==='小红书'?'cyan':'orange'}">${s.type}</span>
+        ${!s.done?`<button class="btn btn-outline btn-sm" style="margin-left:6px;padding:4px 8px;font-size:0.65rem;" onclick="markScheduleDone(${origIdx})">✓</button>`:''}
+        <button class="btn btn-outline btn-sm" style="margin-left:2px;padding:4px 8px;font-size:0.65rem;color:var(--danger);border-color:var(--danger);" onclick="deleteSchedule(${origIdx})">✕</button>
+      </div>
+    `}).join('')}
+    ${data.schedules.length===0?'<div class="empty"><p>暂无日程</p></div>':''}
+  `;
+}
+
+// ============================================================
+// SIDE HUSTLE — 兼职分析 & 收入规划
+// ============================================================
+function renderSideHustle() {
+  const totalProfit = data.orders.filter(o => o.status !== '已取消').reduce((s, o) => s + o.profit, 0);
+  const totalLicense = data.licenses.reduce((s, l) => s + l.amount, 0);
+  const totalIncome = totalProfit + totalLicense;
+
+  return `
+    <div class="hero" style="background:linear-gradient(135deg,#ffd166,#ff8c42);">
+      <h2>📊 兼职收入规划</h2>
+      <p>合规分析 · 收入潜力 · 阶段目标</p>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--mint);margin-bottom:12px;">
+      <div class="card-header"><div class="card-title">✅ 合规确认</div></div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>根据中纪委最新规定，公务员在不影响本职、不涉及职权寻租的前提下，<b style="color:var(--mint);">允许从事以下副业</b>：</p>
+        <p>✔️ 自媒体创作（小红书、公众号等）</p>
+        <p>✔️ 电商经营（淘宝、闲鱼，不涉及职务相关产品）</p>
+        <p>✔️ 艺术创作及版权收入（插画授权、设计服务）</p>
+        <p>✔️ 房产/车辆出租</p>
+        <p>⚠️ <b style="color:var(--yellow);">红线</b>：不得经商办企业、不得挂证取酬、不得利用职权谋私</p>
+        <p style="color:var(--mint);margin-top:6px;">🎯 你目前的淘宝店铺 + 小红书插画，<b>完全合规</b>！</p>
+      </div>
+    </div>
+
+    <div class="sec-title">💰 你的三条收入线</div>
+
+    <!-- Line 1: 淘宝 -->
+    <div class="card" style="border-left:4px solid var(--pink);margin-bottom:10px;">
+      <div class="card-header">
+        <div class="card-title">📦 淘宝店铺</div>
+        <span class="tag tag-pink">已在进行</span>
+      </div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>📌 <b>现状</b>：日出1-2单，单品利润约15-28元</p>
+        <p>📌 <b>当前月收入</b>：约 ${F(totalProfit)}（累计）</p>
+        <p>📌 <b>提升空间</b>：</p>
+        <p>　→ 增加SKU到20个（目前约4个）</p>
+        <p>　→ 优化标题含热搜关键词</p>
+        <p>　→ 每天花20分钟上新+优化</p>
+        <p>📌 <b>目标月收入</b>：<span style="color:var(--pink);font-weight:700;">500-1500元</span></p>
+      </div>
+    </div>
+
+    <!-- Line 2: 小红书插画 -->
+    <div class="card" style="border-left:4px solid var(--purple);margin-bottom:10px;">
+      <div class="card-header">
+        <div class="card-title">🎨 小红书插画</div>
+        <span class="tag tag-purple">核心增长点</span>
+      </div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>📌 <b>现状</b>：28粉丝，曾出贴纸授权赚1000元</p>
+        <p>📌 <b>当前月收入</b>：约 ${F(totalLicense)}（累计授权）</p>
+        <p>📌 <b>变现路径</b>（由易到难）：</p>
+        <p>　① 贴纸/图案授权 → 单次200-500元</p>
+        <p>　② 头像定制 → 50-150元/张</p>
+        <p>　③ 品牌合作 → 500-3000元/条</p>
+        <p>　④ 周边产品（贴纸包/手机壳/帆布袋）→ 持续收入</p>
+        <p>　⑤ 微信表情包打赏 → 被动收入</p>
+        <p>📌 <b>目标月收入</b>：<span style="color:var(--purple);font-weight:700;">1000-3000元</span></p>
+      </div>
+    </div>
+
+    <!-- Line 3: 新增建议 -->
+    <div class="card" style="border-left:4px solid var(--cyan);margin-bottom:10px;">
+      <div class="card-header">
+        <div class="card-title">🆕 建议新增：闲鱼无货源</div>
+        <span class="tag tag-cyan">低门槛</span>
+      </div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>📌 <b>为什么推荐</b>：</p>
+        <p>　→ 和淘宝逻辑相同，但流量分配更公平</p>
+        <p>　→ 不用装修店铺，上架即卖</p>
+        <p>　→ 每天花15分钟擦亮宝贝即可</p>
+        <p>　→ 公务员群体已有成功案例（月入3000-8000元）</p>
+        <p>📌 <b>操作</b>：把淘宝已上架的商品同步到闲鱼</p>
+        <p>📌 <b>目标月收入</b>：<span style="color:var(--cyan);font-weight:700;">300-800元</span></p>
+      </div>
+    </div>
+
+    <!-- 收入总览 -->
+    <div class="sec-title">🎯 三阶段收入目标</div>
+
+    <div class="card" style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,209,102,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🌱</div>
+        <div>
+          <div style="font-weight:700;font-size:0.9rem;">第1-3月 · 起步期</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);">目标月收入：<b style="color:var(--yellow);">1000-2000元</b></div>
+        </div>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+        <p>✅ 淘宝：稳定日出2-3单（月利润600-1000元）</p>
+        <p>✅ 小红书：粉丝破100，每周发2篇（月授权/接单500-1000元）</p>
+        <p>✅ 闲鱼：同步淘宝商品（月利润200-500元）</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,107,157,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🌿</div>
+        <div>
+          <div style="font-weight:700;font-size:0.9rem;">第4-6月 · 成长期</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);">目标月收入：<b style="color:var(--pink);">2500-4500元</b></div>
+        </div>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+        <p>✅ 淘宝：SKU扩充到15个，日出3-5单（月利润1500-2500元）</p>
+        <p>✅ 小红书：粉丝破500，开始接品牌合作（月收入1000-2000元）</p>
+        <p>✅ 闲鱼：稳定运营（月利润300-500元）</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(199,125,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🌳</div>
+        <div>
+          <div style="font-weight:700;font-size:0.9rem;">第7-12月 · 稳定期</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);">目标月收入：<b style="color:var(--purple);">4000-8000元</b></div>
+        </div>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;">
+        <p>✅ 淘宝：选品体系成熟，日出5-8单（月利润2500-4000元）</p>
+        <p>✅ 小红书：粉丝破2000，多渠道变现（月收入2000-4000元）</p>
+        <p>✅ 贴纸/周边产品上线，被动收入起步</p>
+      </div>
+    </div>
+
+    <!-- 每周时间分配 -->
+    <div class="sec-title">⏰ 每周时间规划</div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>时间段</th><th>周一至周五</th><th>周末</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700;">🌅 早起30分钟</td><td>浏览1688选品</td><td>临摹插画练习</td></tr>
+            <tr><td style="font-weight:700;">🏢 午休</td><td>回复淘宝消息</td><td>—</td></tr>
+            <tr><td style="font-weight:700;">🌙 晚上8-10点</td><td>淘宝上新 + 插画创作</td><td>小红书内容制作</td></tr>
+            <tr><td style="font-weight:700;">📱 碎片时间</td><td>刷小红书找灵感</td><td>闲鱼擦亮宝贝</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:10px;line-height:1.6;">
+        <p>💡 每天合计约 <b style="color:var(--yellow);">1.5-2小时</b>，不影响主业和陪Orange</p>
+        <p>💡 核心策略：<b style="color:var(--pink);">工作日维持运营，周末集中创作</b></p>
+      </div>
+    </div>
+
+    <!-- 关键提醒 -->
+    <div class="card" style="margin-top:10px;border-left:4px solid var(--yellow);">
+      <div class="card-header"><div class="card-title">⚠️ 兔子姐姐专属提醒</div></div>
+      <div style="font-size:0.78rem;line-height:1.8;color:var(--text-muted);">
+        <p>🔒 <b>合规第一</b>：淘宝店铺不要卖与工作相关的任何产品</p>
+        <p>🔒 <b>隐私保护</b>：小红书账号不与真实身份关联</p>
+        <p>🔒 <b>时间管理</b>：主业工作质量不能下降，这是底线</p>
+        <p>💕 <b>别忘了Orange</b>：每天至少留1小时陪女儿</p>
+        <p>🧘 <b>照顾好自己</b>：保证6-7小时睡眠，身体是革命本钱</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// MODALS
+// ============================================================
+function showModal(name) {
+  const existing = document.getElementById('modal-' + name);
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay show';
+  overlay.id = 'modal-' + name;
+  overlay.innerHTML = getModalContent(name);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function getModalContent(name) {
+  const today = new Date().toISOString().split('T')[0];
+  switch(name) {
+    case 'addSchedule':
+      return `<div class="modal"><div class="modal-title">🗓️ 添加日程</div>
+        <div class="form-row"><div class="form-group"><label>日期</label><input id="mf-date" type="date" value="${today}"></div><div class="form-group"><label>时间</label><input id="mf-time" type="time" value="09:00"></div></div>
+        <div class="form-group"><label>事项</label><input id="mf-title" placeholder="事项描述"></div>
+        <div class="form-group"><label>分类</label><select id="mf-type"><option>主业</option><option>淘宝</option><option>小红书</option><option>家庭</option><option>其他</option></select></div>
+        <button class="btn btn-primary btn-block" onclick="saveSchedule()">保存</button></div>`;
+
+    case 'addOrder':
+      return `<div class="modal"><div class="modal-title">📦 新增订单</div>
+        <div class="form-row"><div class="form-group"><label>日期</label><input id="mf-date" type="date" value="${today}"></div><div class="form-group"><label>状态</label><select id="mf-status"><option>待发货</option><option>已发货</option><option>已签收</option></select></div></div>
+        <div class="form-group"><label>商品名称</label><input id="mf-product" placeholder="商品名称"></div>
+        <div class="form-row"><div class="form-group"><label>成本</label><input id="mf-cost" type="number" step="0.01"></div><div class="form-group"><label>售价</label><input id="mf-price" type="number" step="0.01"></div></div>
+        <div class="form-group"><label>备注</label><input id="mf-note" placeholder="可选"></div>
+        <button class="btn btn-primary btn-block" onclick="saveOrder()">保存</button></div>`;
+
+    case 'addProduct':
+      return `<div class="modal"><div class="modal-title">🔍 添加选品</div>
+        <div class="form-group"><label>商品名称</label><input id="mf-name" placeholder="商品名称"></div>
+        <div class="form-row"><div class="form-group"><label>成本</label><input id="mf-cost" type="number" step="0.01"></div><div class="form-group"><label>售价</label><input id="mf-price" type="number" step="0.01"></div></div>
+        <div class="form-row"><div class="form-group"><label>来源</label><input id="mf-source" value="1688"></div><div class="form-group"><label>状态</label><select id="mf-status"><option>调研中</option><option>已上架</option></select></div></div>
+        <div class="form-group"><label>备注</label><input id="mf-notes" placeholder="可选"></div>
+        <button class="btn btn-primary btn-block" onclick="saveProduct()">保存</button></div>`;
+
+    case 'addXhsPost':
+      return `<div class="modal"><div class="modal-title">📅 添加内容计划</div>
+        <div class="form-row"><div class="form-group"><label>日期</label><input id="mf-date" type="date" value="${today}"></div><div class="form-group"><label>类型</label><select id="mf-type"><option>贴纸</option><option>日常</option><option>接单</option><option>教程</option></select></div></div>
+        <div class="form-group"><label>标题</label><input id="mf-title" placeholder="内容标题"></div>
+        <div class="form-group"><label>状态</label><select id="mf-status2"><option>计划中</option><option>草稿</option><option>待发布</option></select></div>
+        <button class="btn btn-primary btn-block" onclick="saveXhsPost()">保存</button></div>`;
+
+    case 'addLicense':
+      return `<div class="modal"><div class="modal-title">🎨 添加授权</div>
+        <div class="form-row"><div class="form-group"><label>日期</label><input id="mf-date" type="date" value="${today}"></div><div class="form-group"><label>金额</label><input id="mf-amount" type="number"></div></div>
+        <div class="form-group"><label>购买方</label><input id="mf-buyer" placeholder="店铺/博主名称"></div>
+        <div class="form-row"><div class="form-group"><label>类型</label><select id="mf-type"><option>贴纸授权</option><option>图案授权</option><option>商用授权</option></select></div><div class="form-group"><label>状态</label><select id="mf-status"><option>已完成</option><option>进行中</option></select></div></div>
+        <div class="form-group"><label>备注</label><input id="mf-note" placeholder="可选"></div>
+        <button class="btn btn-primary btn-block" onclick="saveLicense()">保存</button></div>`;
+
+    case 'addReport':
+      return `<div class="modal"><div class="modal-title">📝 新建报导</div>
+        <div class="form-group"><label>标题</label><input id="mf-title" placeholder="报导标题"></div>
+        <div class="form-row"><div class="form-group"><label>类别</label><select id="mf-category"><option>调研报告</option><option>工作总结</option><option>发言稿</option><option>简报</option></select></div><div class="form-group"><label>截止日期</label><input id="mf-date" type="date"></div></div>
+        <div class="form-group"><label>状态</label><select id="mf-status"><option>待开始</option><option>撰写中</option></select></div>
+        <div class="form-group"><label>内容</label><textarea id="mf-content" rows="4" placeholder="开始撰写..."></textarea></div>
+        <button class="btn btn-primary btn-block" onclick="saveReport()">保存</button></div>`;
+
+    case 'editReport':
+      return `<div class="modal"><div class="modal-title">✏️ 编辑报导</div>
+        <input type="hidden" id="mf-index">
+        <div class="form-group"><label>标题</label><input id="mf-title"></div>
+        <div class="form-row"><div class="form-group"><label>类别</label><select id="mf-category"><option>调研报告</option><option>工作总结</option><option>发言稿</option><option>简报</option></select></div><div class="form-group"><label>截止日期</label><input id="mf-date" type="date"></div></div>
+        <div class="form-group"><label>状态</label><select id="mf-status"><option>待开始</option><option>撰写中</option><option>已完成</option></select></div>
+        <div class="form-group"><label>内容</label><textarea id="mf-content" rows="6"></textarea></div>
+        <button class="btn btn-primary btn-block" onclick="updateReport()">保存修改</button></div>`;
+
+    default: return '';
+  }
+}
+
+// ============================================================
+// CRUD OPERATIONS
+// ============================================================
+function saveSchedule() {
+  data.schedules.push({
+    id: Date.now(),
+    date: document.getElementById('mf-date').value,
+    time: document.getElementById('mf-time').value,
+    title: document.getElementById('mf-title').value,
+    type: document.getElementById('mf-type').value,
+    done: false
+  });
+  saveData(); closeTopModal(); toast('✅ 已添加'); renderPage(currentPage);
+}
+
+function markScheduleDone(i) { data.schedules[i].done = true; saveData(); toast('✅ 已完成'); renderPage(currentPage); }
+function deleteSchedule(i) { if(confirm('确定删除？')){data.schedules.splice(i,1);saveData();toast('已删除');renderPage(currentPage);} }
+
+function saveOrder() {
+  const cost = parseFloat(document.getElementById('mf-cost').value) || 0;
+  const price = parseFloat(document.getElementById('mf-price').value) || 0;
+  data.orders.unshift({
+    id: 'TB' + Date.now().toString().slice(-8),
+    date: document.getElementById('mf-date').value,
+    product: document.getElementById('mf-product').value,
+    source: '1688', cost, price,
+    status: document.getElementById('mf-status').value,
+    profit: price - cost,
+    note: document.getElementById('mf-note').value
+  });
+  saveData(); closeTopModal(); toast('✅ 订单已添加'); renderPage(currentPage);
+}
+
+function deleteOrder(i) { if(confirm('确定删除？')){data.orders.splice(i,1);saveData();toast('已删除');renderPage(currentPage);} }
+
+function saveProduct() {
+  const cp = parseFloat(document.getElementById('mf-cost').value) || 0;
+  const sp = parseFloat(document.getElementById('mf-price').value) || 0;
+  data.products.push({
+    id: Date.now(),
+    name: document.getElementById('mf-name').value,
+    source: document.getElementById('mf-source').value,
+    sourcePrice: cp, targetPrice: sp,
+    margin: sp>0?((sp-cp)/sp*100).toFixed(1)+'%':'0%',
+    status: document.getElementById('mf-status').value,
+    notes: document.getElementById('mf-notes').value
+  });
+  saveData(); closeTopModal(); toast('✅ 已添加'); renderPage(currentPage);
+}
+
+function deleteProduct(i) { if(confirm('确定删除？')){data.products.splice(i,1);saveData();toast('已删除');renderPage(currentPage);} }
+
+function saveXhsPost() {
+  data.xhsPosts.push({
+    id: Date.now(),
+    date: document.getElementById('mf-date').value,
+    title: document.getElementById('mf-title').value,
+    type: document.getElementById('mf-type').value,
+    status: document.getElementById('mf-status2').value,
+    likes: 0
+  });
+  saveData(); closeTopModal(); toast('✅ 已添加'); renderPage(currentPage);
+}
+
+function updateXhsStatus(i) { data.xhsPosts[i].status = '已发布'; saveData(); toast('🎉 已发布'); renderPage(currentPage); }
+function deleteXhsPost(i) { if(confirm('确定删除？')){data.xhsPosts.splice(i,1);saveData();toast('已删除');renderPage(currentPage);} }
+
+function saveLicense() {
+  data.licenses.unshift({
+    id: Date.now(),
+    date: document.getElementById('mf-date').value,
+    buyer: document.getElementById('mf-buyer').value,
+    type: document.getElementById('mf-type').value,
+    amount: parseFloat(document.getElementById('mf-amount').value) || 0,
+    status: document.getElementById('mf-status').value,
+    note: document.getElementById('mf-note').value
+  });
+  saveData(); closeTopModal(); toast('✅ 已记录'); renderPage(currentPage);
+}
+
+function deleteLicense(i) { if(confirm('确定删除？')){data.licenses.splice(i,1);saveData();toast('已删除');renderPage(currentPage);} }
+
+function saveReport() {
+  data.reports.push({
+    id: Date.now(),
+    title: document.getElementById('mf-title').value,
+    date: document.getElementById('mf-date').value,
+    category: document.getElementById('mf-category').value,
+    status: document.getElementById('mf-status').value,
+    content: document.getElementById('mf-content').value
+  });
+  saveData(); closeTopModal(); toast('✅ 已创建'); renderPage(currentPage);
+}
+
+let editingReportIdx = -1;
+function editReport(i) {
+  editingReportIdx = i;
+  const r = data.reports[i];
+  showModal('editReport');
+  setTimeout(() => {
+    document.getElementById('mf-index').value = i;
+    document.getElementById('mf-title').value = r.title;
+    document.getElementById('mf-date').value = r.date;
+    document.getElementById('mf-category').value = r.category;
+    document.getElementById('mf-status').value = r.status;
+    document.getElementById('mf-content').value = r.content || '';
+  }, 100);
+}
+
+function updateReport() {
+  const i = parseInt(document.getElementById('mf-index').value);
+  data.reports[i].title = document.getElementById('mf-title').value;
+  data.reports[i].date = document.getElementById('mf-date').value;
+  data.reports[i].category = document.getElementById('mf-category').value;
+  data.reports[i].status = document.getElementById('mf-status').value;
+  data.reports[i].content = document.getElementById('mf-content').value;
+  saveData(); closeTopModal(); toast('✅ 已更新'); renderPage(currentPage);
+}
+
+function markReportDone(i) { data.reports[i].status = '已完成'; saveData(); toast('✅ 已完成'); renderPage(currentPage); }
+function deleteReport(i) { if(confirm('确定删除？')){data.reports.splice(i,1);saveData();toast('已删除');renderPage(currentPage);} }
+
+// ============================================================
+// HOT PRODUCTS ACTIONS
+// ============================================================
+function filterHot(cat) {
+  document.getElementById('hotProductList').innerHTML = renderHotProductList(cat);
+}
+
+function copyProduct(name, cost, sell) {
+  if (!data.copiedProducts) data.copiedProducts = [];
+  if (!data.copiedProducts.includes(name)) {
+    data.copiedProducts.push(name);
+    // Also add to products
+    data.products.push({
+      id: Date.now(),
+      name: name,
+      source: '1688',
+      sourcePrice: cost,
+      targetPrice: sell,
+      margin: ((sell-cost)/sell*100).toFixed(1) + '%',
+      status: '已上架',
+      notes: '从爆款选品搬运'
+    });
+    saveData();
+    toast('✅ 已搬运到我的选品！');
+    renderPage('taobao-hot');
+  } else {
+    toast('已搬运过了~');
+  }
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function closeTopModal() {
+  const modals = document.querySelectorAll('.modal-overlay.show');
+  if (modals.length > 0) modals[modals.length - 1].remove();
+}
+
+function navigateTo(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.page === page);
+  });
+  renderPage(page);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function openLink(url) {
+  window.open(url, '_blank');
+}
+
+function copyToClipboard(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => toast('📋 已复制到剪贴板'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('📋 已复制到剪贴板');
+  }
+}
+
+// ============================================================
+// BIND PAGE EVENTS
+// ============================================================
+function bindPageEvents(page) {
+  // Events are handled via inline onclick
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderPage('dashboard');
+</script>
+</body>
+</html>
